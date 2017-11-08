@@ -10,8 +10,8 @@ def getTableRow(goal, description, outcome):
 def getGoalBegin(goal):
     return goalBeginTemplate.replace('goal', goal)
 
-def getFigure(path):
-    return figureTemplate.replace('path', path)
+def getFigure(path, name):
+    return figureTemplate.replace('path', path).replace('name', name)
 
 '''
 file = open('./out/test.tex', 'w+')
@@ -63,8 +63,21 @@ for week in weeks:
     for team in writing:
         for i in range(0, len(team[1])):
             if len(team[1][i]) < 3: continue
+            body = team[1][i][3]
+            body = body.split('<')
+            for i in range(1, len(body)):
+                filename = body[i].split('>')[0]
+                body[i] = body[i].split('>')[1]
+                body[i] = r'Figure \ref{' + filename.split('.')[0] + r'}' + body[i]
+                if '.' in body[i]:
+                    body[i] = body[i].split('.', 1)[0] + getFigure('../temp/{}/{}'.format(week, filename), filename.split('.')[0]) + body[i].split('.', 1)[1]
+                else:
+                    body[i] = body[i] + getFigure('../temp/{}/{}'.format(week, filename), filename.split('.')[0])
+                
             tex.write(getGoalBegin(team[0] + ' ' + str(i) + ': ' + team[1][i][0]))
-            tex.write(team[1][i][3])
 
+            for bodyElement in body:
+                tex.write(bodyElement)
+                
 tex.write(r'\end{document}')
 tex.close

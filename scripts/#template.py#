@@ -6,7 +6,6 @@ preamble = r'''
 \usepackage{ragged2e}
 \usepackage{longtable}
 \usepackage{graphicx}
-\usepackage{caption}
 
 %header
 \pagestyle{fancy}
@@ -54,7 +53,7 @@ goalBeginTemplate = r'''
 '''
 
 figureTemplate = r'''
-\begin{figure}[b!]
+\begin{figure}[h!]
 \includegraphics[width=\linewidth]{path}
 \caption{}
 \label{name}

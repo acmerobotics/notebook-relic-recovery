@@ -6,6 +6,10 @@ def convert(source, dest):
     
 def copy(source, dest):
     #os.system('cp "{}" "{}"').format(source, dest)
+    try:
+        os.makedirs('./test/' + number)
+    except Exception:
+        print 'already exists'
     copyfile(source, dest)
 
 sources = os.listdir("./in")
