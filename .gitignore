@@ -1,3 +1,6 @@
+temp/
 in/
 out/
 *.log
+*.pyc
+*.py~
