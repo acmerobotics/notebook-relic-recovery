@@ -53,10 +53,10 @@ goalBeginTemplate = r'''
 \subsection{goal}
 '''
 
-figureTemplate = r'''
-\begin{figure}[b!]
+figureTemplate = r'''\begin{figure}
 \includegraphics[width=\linewidth]{path}
-\caption{}
-\label{name}
-\end{figure}
-'''
+\caption{captionr}
+\label{fig:name}
+\end{figure}'''
+
+eqTemplate = r'\begin{equation} value \label{eq:name} \end{equation}'
