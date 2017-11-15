@@ -1,5 +1,6 @@
 from template import *
 import os
+import datetime
 
 def getTableBegin(title):
     return tableBeginTemplate.replace('title', title)
@@ -39,6 +40,7 @@ for week in weeks:
     tex.write(weekBegin)
     teams = os.listdir('./temp/' + week)
     writing = []
+    firstTeam = True
     for team in teams:
         if '.csv' not in team: continue
         name = 'Software'
@@ -51,6 +53,15 @@ for week in weeks:
         file = file.replace('%', r'\%')
         #file = file.replace('$', r'\$')
         file = file.split('\n')
+
+        if firstTeam:
+            firstTeam = False
+            startDate = file[0].split('\t')[1]
+            numbers = startDate.split('/')
+            startDate = datetime.date(int(numbers[2])+2000, int(numbers[0]), int(numbers[1]))
+            enddate = startDate + datetime.timedelta(days=6)
+            tex.write(startDate.strftime('%d %B %Y'))
+        
         lines = []
         for line in file:
             if not line.startswith('\t'): lines.append(line.split('\t'))
@@ -60,19 +71,29 @@ for week in weeks:
                 if len(lines[i][3]) > 10:
                     writing[-1][1].append(lines[i])
 
+
+                    
+    done = []
     for team in writing:
-        tex.write(getTableBegin(team[0] + ' Goals'))
         counter = 1
+        if team[0] in done: continue
+        done.append(team[0])
+        tex.write(r'\subsection{' + str(team[0]) + r' Goals}')
         for entry in team[1]:
             if len(entry) > 2:
                 entry[0] = '{} {}: {}'.format(team[0][0], counter, entry[0])
                 counter += 1
-                tex.write(getTableRow(entry[0], entry[1], entry[2]))
-        tex.write(tableEnd)
+                tex.write(r'\paragraph{' + entry[0] + '}' + entry[1])
 
+    tex.write(r'\newpage')
+                          
+
+    done = []
     for team in writing:
         for i in range(0, len(team[1])):
             if len(team[1][i]) < 3: continue
+            if team[0] in done: continue
+            done.append(team[0])
             title = team[1][i][0]
             body = team[1][i][3]
             body = body.split('<')

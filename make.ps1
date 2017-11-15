@@ -1,5 +1,11 @@
-python ./scripts/convert.py
-#todo spell check
+Param([switch]$c)
+
+If ($c) {
+   python ./scripts/convert.py
+   } Else {
+   python ./scripts/convert.py
+}
+
 python ./scripts/generate.py
 cd out
 latex notebook.tex -output-format=pdf

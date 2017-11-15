@@ -7,6 +7,9 @@ preamble = r'''
 \usepackage{longtable}
 \usepackage{graphicx}
 \usepackage{caption}
+\usepackage{geometry}
+
+%\newgeometry{vmargin={20mm}, hmargin={12mm,17mm}} 
 
 %header
 \pagestyle{fancy}
@@ -53,8 +56,8 @@ goalBeginTemplate = r'''
 \subsection{goal}
 '''
 
-figureTemplate = r'''\begin{figure}
-\includegraphics[width=\linewidth]{path}
+figureTemplate = r'''\begin{figure} \centering
+\includegraphics[width=10cm,height=10cm,keepaspectratio]{path}
 \caption{captionr}
 \label{fig:name}
 \end{figure}'''

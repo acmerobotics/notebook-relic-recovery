@@ -3,6 +3,7 @@ from shutil import copyfile
 
 def convert(source, dest):
     os.system('python ./lib/xlsx2csv/xlsx2csv.py "{}" \"{}\" -d \'tab\''.format(source, dest))
+#    os.system('aspell check {}'.format(dest))
     
 def copy(source, dest):
     #os.system('cp "{}" "{}"').format(source, dest)
