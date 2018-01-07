@@ -8,6 +8,8 @@ preamble = r'''
 \usepackage{graphicx}
 \usepackage{caption}
 \usepackage{geometry}
+\usepackage{amsmath}
+\usepackage{rotating}
 
 %\newgeometry{vmargin={20mm}, hmargin={12mm,17mm}} 
 
@@ -63,3 +65,9 @@ figureTemplate = r'''\begin{figure} \centering
 \end{figure}'''
 
 eqTemplate = r'\begin{equation} value \label{eq:name} \end{equation}'
+
+scheduleTemplate = r'''
+\begin{sidewaysfigure}
+\includegraphics[width=\textheight]{file}
+\end{sidewaysfigure}
+'''

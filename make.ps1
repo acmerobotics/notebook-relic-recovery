@@ -3,7 +3,6 @@ Param([switch]$c)
 If ($c) {
    python ./scripts/convert.py
    } Else {
-   python ./scripts/convert.py
 }
 
 python ./scripts/generate.py

@@ -3,7 +3,7 @@ from shutil import copyfile
 
 def convert(source, dest):
     os.system('python ./lib/xlsx2csv/xlsx2csv.py "{}" \"{}\" -d \'tab\''.format(source, dest))
-#    os.system('aspell check {}'.format(dest))
+    os.system('aspell check {}'.format(dest))
     
 def copy(source, dest):
     #os.system('cp "{}" "{}"').format(source, dest)
@@ -21,7 +21,7 @@ for source in sources:
     source = "./in/" + source
     files = os.listdir(source)
     try:
-        os.makedirs('./test/' + number)
+        os.makedirs('./test/' + number + '/')
     except Exception:
         print 'already exists'
     for file in files:

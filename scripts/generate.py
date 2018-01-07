@@ -17,6 +17,7 @@ def getFigure(path, name):
 def getEq(value, name):
     return eqTemplate.replace('value', value).replace('name', name)
 
+
 '''
 file = open('./out/test.tex', 'w+')
 file.write(preamble)
@@ -34,6 +35,8 @@ file.write(r'\end{document}')
 tex = open('./out/notebook.tex', 'w+')
 tex.write(preamble)
 tex.write(r'\begin{document}')
+tex.write(r'\tableofcontents')
+tex.write(r'\newpage')
 
 weeks = os.listdir("./temp")
 for week in weeks:
@@ -42,6 +45,8 @@ for week in weeks:
     writing = []
     firstTeam = True
     for team in teams:
+        if 'schedule.pdf' in team:
+            tex.write(scheduleTemplate.replace('file', '../temp/' + week + '/' + 'schedule.pdf'))
         if '.csv' not in team: continue
         name = 'Software'
         if 'b' in team: name = 'Business'
@@ -58,7 +63,7 @@ for week in weeks:
             firstTeam = False
             startDate = file[0].split('\t')[1]
             numbers = startDate.split('/')
-            startDate = datetime.date(int(numbers[2])+2000, int(numbers[0]), int(numbers[1]))
+            startDate = datetime.date(2017, int(numbers[0]), int(numbers[1]))
             enddate = startDate + datetime.timedelta(days=6)
             tex.write(startDate.strftime('%d %B %Y'))
         
@@ -90,10 +95,10 @@ for week in weeks:
 
     done = []
     for team in writing:
+        if team[0] in done: continue
+        done.append(team[0])
         for i in range(0, len(team[1])):
             if len(team[1][i]) < 3: continue
-            if team[0] in done: continue
-            done.append(team[0])
             title = team[1][i][0]
             body = team[1][i][3]
             body = body.split('<')
@@ -102,7 +107,7 @@ for week in weeks:
                 caption = ''
                 if ',' in filename:
                     caption = filename.split(',')[1]
-                    print caption
+                    #print caption
                     filename = filename.split(',')[0]
                 body[i] = body[i].split('>')[1]
                 body[i] = r'Figure \ref{fig:' + filename.split('.')[0] + r'}' + body[i]
@@ -121,4 +126,4 @@ for week in weeks:
             tex.write(body)
                 
 tex.write(r'\end{document}')
-tex.close
+tex.close()
