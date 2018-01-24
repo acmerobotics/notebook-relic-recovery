@@ -3,6 +3,7 @@
 import os
 import template
 import openpyxl
+import datetime
 
 
 def append_line(s1, s2):
@@ -50,6 +51,9 @@ def parse_response(response, path):
 
     return response
 
+def getDate(week):
+    return (datetime.date(2017, 10, 28) + datetime.timedelta(days=6)).strftime('%d %B %Y')
+
 tex = open('./out/notebook.tex', 'w+')
 tex.write(template.preamble)
 tex.write(r'\begin{document}')
@@ -62,10 +66,13 @@ numWeeks = len(dir)
 for i in range(numWeeks):
     goalsText = ''
     responseText = ''
-
+    print 'week ', i + 1
     weekDir = dir[i]
     tex.write(template.weekBegin)
+    tex.write(r'\subsection*{' + getDate(i) + r'}')
     weekList = os.listdir('./in/' + weekDir+ '/')
+    if 'schedule.pdf' in weekList:
+        tex.write(template.scheduleTemplate.replace('file', '../in/' + weekDir + '/' + 'schedule.pdf'))
     for file in weekList:
         if 'xlsx' not in file: continue
         first = file.lower()[0]
@@ -96,6 +103,7 @@ for i in range(numWeeks):
             goal = ws['A' + str(goalNum + 3)].value
 
     tex.write(goalsText)
+    tex.write(r'  \newpage  ' + '\n')
     tex.write(responseText)
 
 tex.write(r'\end{document}')
