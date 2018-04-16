@@ -104,7 +104,7 @@ def getDate(week):
 tex = open('./out/notebook.tex', 'w+')
 tex.write(template.preamble)
 tex.write(r'\begin{document}')
-tex.write(r'\tableofcontents')
+tex.write(r'\tableofcontents \contentsfalse')
 tex.write(r'\newpage')
 
 dir = os.listdir('./in')
@@ -115,9 +115,18 @@ for i in range(numWeeks):
     responseText = ''
     print 'week ', i + 1
     weekDir = dir[i]
-    tex.write(template.weekBegin)
-    tex.write(r'\subsection*{' + getDate(i) + r'}')
     weekList = os.listdir('./in/' + weekDir+ '/')
+    note = ''
+    noteText = ''
+    if 'note.txt' in weekList:
+        noteFile = open('./in/' + weekDir + '/note.txt')
+        note, noteText = noteFile.read().split('\n')
+        note = '({})'.format(note)
+    tex.write(template.weekBegin.replace('note', note))
+
+    tex.write(r'\subsection*{' + getDate(i) + r'}')
+    if len(noteText) > 0:
+            tex.write(r'\paragraph{Note:}' + noteText)   
     if 'schedule.pdf' in weekList:
         tex.write(template.scheduleTemplate.replace('file', '../in/' + weekDir + '/' + 'schedule.pdf'))
     for file in weekList:

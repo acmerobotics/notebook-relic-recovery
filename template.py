@@ -35,7 +35,7 @@ preamble = r'''
   tabsize=4
 }
 
-\setcounter{secnumdepth}{0}
+\setcounter{secnumdepth}{1}
 
 %\newgeometry{vmargin={20mm}, hmargin={12mm,17mm}}
 
@@ -51,7 +51,7 @@ preamble = r'''
 \pagestyle{fancy}
 \lhead{ACME Robotics}
 \chead{\#8367}
-\rhead{Week \thesection}
+\rhead{\ifcontents Contents \else Week \thesection \fi}
 
 %get rid of section numbering
 \makeatletter
@@ -62,11 +62,14 @@ preamble = r'''
 
 %fix table padding
 \renewcommand{\arraystretch}{1.5}
+
+\newif\ifcontents
+\contentstrue
 '''
 
 weekBegin = r'''
 \newpage
-\section{Week \thesection}
+\section{Week \thesection\ note}
 '''
 
 tableBeginTemplate = r'''
