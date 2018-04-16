@@ -12,11 +12,55 @@ def append_line(s1, s2):
 def findOccurences(s, ch):
     return [i for i, letter in enumerate(s) if letter == ch]
 
+def substring_indexes(substring, string):
+
+    last_found = -1  # Begin at -1 so the next position to search from is 0
+    while True:
+        # Find next index of substring, by starting after its last known position
+        last_found = string.find(substring, last_found + 1)
+        if last_found == -1:
+            break  # All occurrences have been found
+        yield last_found
+
+
+def inIntervals(index, intervals):
+    for interval in intervals:
+        if  interval[0] < index < interval[1]:
+            print "there is one in the intetrval"
+            return True
+
+    return False
+
 def parse_response(response, path):
+
+
+    begin = 0
+
+    if 'Emma began to work on the Scouting App this week and was able to create a great deal of it' in response:
+        print 'its the one'
+
+
     while '<' in response:
-        start = response.find('<') + 1
-        end = response.find('>')
+
+        codeStarts = list(substring_indexes('begin{lstlisting}', response))
+        codeEnds = list(substring_indexes('end{lstlisting}', response))
+
+        if not len(codeStarts) == len(codeEnds):
+            raise Exception("you gonna have a problem" + response[:50])
+
+        ignore = zip(codeStarts, codeEnds)
+
+        start = response.find('<', begin) + 1
+        if start == 0: break
+        if inIntervals(start, ignore):
+            begin = start+1
+            continue
+        end = response.find('>', start)
+        begin = end + 1
+
         image = response[start:end]
+
+        print image
 
 
         name = image.split('.')[0]
@@ -30,12 +74,15 @@ def parse_response(response, path):
 
         response = response[:start-1] + figure + response[end+1:]
 
+        if response.find('<', end) == -1: break
+
     marks = findOccurences(response, '#')
+
+
     while '#' in response:
         start = findOccurences(response, '#')[0] + 1
         end = findOccurences(response, '#')[1]
         equation = response[start:end]
-        print equation
         name = ''
         result = ''
         if ',' in equation:
@@ -43,7 +90,7 @@ def parse_response(response, path):
             result = template.eqTemplate.replace('value', equation.split(',')[1]).replace('name', name)
         else:
             name = equation
-        print name
+
 
         result = result + r'Equation \ref{eq:' + name + '}'
 
@@ -52,7 +99,7 @@ def parse_response(response, path):
     return response
 
 def getDate(week):
-    return (datetime.date(2017, 10, 28) + datetime.timedelta(days=6)).strftime('%d %B %Y')
+    return (datetime.date(2017, 8, 28) + datetime.timedelta(days=7*week)).strftime('%d %B %Y')
 
 tex = open('./out/notebook.tex', 'w+')
 tex.write(template.preamble)
@@ -92,7 +139,11 @@ for i in range(numWeeks):
             descip = ws['B' + str(goalNum + 3)].value
             response = ws['D' + str(goalNum + 3)].value
 
-            goalsText = append_line(goalsText, r'\paragraph{' + goal + '} ' + descip)
+            try:
+                goalsText = append_line(goalsText, r'\paragraph{' + goal + '} ' + descip)
+            except Exception as e:
+                print goal
+                raise e
 
             response = parse_response(response, '../in/' + weekDir + '/')
 
