@@ -35,11 +35,15 @@ preamble = r'''
   tabsize=4
 }
 
-%\newgeometry{vmargin={20mm}, hmargin={12mm,17mm}} 
+\setcounter{secnumdepth}{0}
 
-\makeatletter 
-\renewcommand{\thefigure}{\thesection .\@arabic\c@figure}
-\makeatother
+%\newgeometry{vmargin={20mm}, hmargin={12mm,17mm}}
+
+%\makeatletter
+%\renewcommand{\thefigure}{\thesection .\@arabic\c@figure}
+%\makeatother
+\usepackage{chngcntr}
+\counterwithin{figure}{section}
 
 \renewcommand*{\thepage}{C\arabic{page}}
 
@@ -80,7 +84,7 @@ goal & description & outcome \\ \hline
 
 tableEnd = r'''
 \end{longtable}
-\end{flushleft} 
+\end{flushleft}
 \end{center}
 '''
 

@@ -99,7 +99,7 @@ def parse_response(response, path):
     return response
 
 def getDate(week):
-    return (datetime.date(2017, 8, 28) + datetime.timedelta(days=7*week)).strftime('%d %B %Y')
+    return (datetime.date(2017, 8, 28) + datetime.timedelta(days=7*(week+1))).strftime('%d %B %Y')
 
 tex = open('./out/notebook.tex', 'w+')
 tex.write(template.preamble)
